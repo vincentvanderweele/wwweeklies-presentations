@@ -1,0 +1,118 @@
+swagger: '2.0'
+info:
+  title: WWWeeklies API
+  description: Manage WWWeeklies presentations
+  version: 1.0.0
+host: localhost:9999
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+definitions:
+  Presentation:
+    description: A presentation at the WWWeeklies
+    type: object
+    properties:
+      id:
+        type: string
+        readOnly: true
+      title:
+        type: string
+        minLength: 1
+      speaker:
+        type: string
+        minLength: 1
+      site:
+        type: string
+        enum:
+          - Helsinki
+          - Tampere
+          - London
+          - Berlin
+          - Munich
+          - Stockholm
+          - External
+      date:
+        type: string
+        format: date-time
+      duration:
+        type: integer
+        minimum: 0
+        maximum: 60
+      remarks:
+        type: string
+    required:
+      - id
+      - speaker
+      - title
+      - site
+      - date
+      - duration
+  Presentations:
+    description: A list of presentations
+    type: array
+    items:
+      $ref: '#/definitions/Presentation'
+paths:
+  /presentations:
+    get:
+      operationId: getPresentations
+      responses:
+        200:
+          description: Returns all presentations
+          schema:
+            $ref: '#/definitions/Presentations'
+    post:
+      operationId: createPresentation
+      parameters:
+        - name: presentation
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Presentation'
+      responses:
+        200:
+          description: The newly created presentation
+          schema:
+            $ref: '#/definitions/Presentation'
+        400:
+          description: Invalid data
+  /presentations/{presentationId}:
+    parameters:
+      - name: presentationId
+        in: path
+        type: string
+        required: true
+    get:
+      operationId: getPresentation
+      responses:
+        200:
+          description: The presentation with the given presentation id
+          schema:
+            $ref: '#/definitions/Presentation'
+        404:
+          description: Unknown presentation id
+    put:
+      operationId: updatePresentation
+      parameters:
+        - name: update
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Presentation'
+      responses:
+        200:
+          description: Successfully updated the presentation
+        400:
+          description: Invalid data
+        404:
+          description: Unknown presentation id
+    delete:
+      operationId: deletePresentation
+      responses:
+        200:
+          description: Successfully deleted the presentation
+        404:
+          description: Unknown presentation id
