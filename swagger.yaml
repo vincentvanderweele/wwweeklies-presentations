@@ -55,6 +55,12 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/Presentation'
+  InvalidDataError:
+    type: string
+    x-error: true
+  NotFoundError:
+    type: string
+    x-error: true
 paths:
   /presentations:
     get:
@@ -79,6 +85,8 @@ paths:
             $ref: '#/definitions/Presentation'
         400:
           description: Invalid data
+          schema:
+            $ref: '#/definitions/InvalidDataError'
   /presentations/{presentationId}:
     parameters:
       - name: presentationId
@@ -94,6 +102,8 @@ paths:
             $ref: '#/definitions/Presentation'
         404:
           description: Unknown presentation id
+          schema:
+            $ref: '#/definitions/NotFoundError'
     put:
       operationId: updatePresentation
       parameters:
@@ -107,8 +117,12 @@ paths:
           description: Successfully updated the presentation
         400:
           description: Invalid data
+          schema:
+            $ref: '#/definitions/InvalidDataError'
         404:
           description: Unknown presentation id
+          schema:
+            $ref: '#/definitions/NotFoundError'
     delete:
       operationId: deletePresentation
       responses:
@@ -116,3 +130,5 @@ paths:
           description: Successfully deleted the presentation
         404:
           description: Unknown presentation id
+          schema:
+            $ref: '#/definitions/NotFoundError'

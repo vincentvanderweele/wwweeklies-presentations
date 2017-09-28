@@ -71,5 +71,5 @@ func (s *presentationStorage) getPresentation(id string) (*model.ReadOnlyPresent
 		}
 	}
 
-	return nil, 0, presentationNotFoundError("")
+	return nil, 0, model.NotFoundError("")
 }
